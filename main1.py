@@ -8,15 +8,39 @@ print('-' * (len(name) + 15))
 print('Seu controlador de gastos.')
 print()
 
-saldo = float(input('Quanto você quer gastar no mês?: '))
+def validar_valor(mensagem):
+        valor_valido = False
+        while not valor_valido:
+            try:
+                valor = float(input(mensagem))
+                if valor <= 0:
+                    print('Valor inválido. Digite novamente.')
+                else:
+                    valor_valido = True
+                    return valor
+            except ValueError:
+                print('Erro. Por favor, tente novamente.')
+
+
+def validar_nome(mensagem):
+    nome_gasto = False
+    while not nome_gasto:
+        nome = input(mensagem).strip()
+        if nome != '':
+            nome_gasto = True
+            return nome
+        else:
+            print('Coloque um nome válido.')
+
+saldo = validar_valor('Quantos você quer gastar no mês?: ')
 
 gastos = []
 
 def resposta():
      resposta_valida = False
-     while resposta_valida == False:
-          newgasto = input('Gostaria de adicionar um novo gasto?: (s/n).\n')
-          if newgasto == 'n' or newgasto == 's':
+     while not resposta_valida:
+          newgasto = input('Gostaria de adicionar um novo gasto?: (s/n).\n').lower().strip()
+          if newgasto in ['s', 'n']:
                resposta_valida = True
                return newgasto
           else:
@@ -26,31 +50,14 @@ def resposta():
 def add_gasto():
 
     resposta_usuario = resposta()
-    while resposta_usuario == 's':
-            valor_valido = False
-            while valor_valido == False:       
-                    try:
-                        gasto = float(input('Digite o valor do gasto: '))
-                        if gasto <= 0:
-                            print('Valor inválido. Digite novamente.')
-                        else:
-                            valor_valido = True 
-                    except ValueError:
-                        print('Erro. Por favor, tente novamente.')   
-
-            nome_gasto = False
-            while nome_gasto == False:
-                    nome = input('Qual o nome do gasto: ').strip()
-                    if nome != '':
-                        nome_gasto = True
-                    else:
-                        print('Coloque um nome válido.')        
+    while resposta_usuario == 's':   
+            gasto = validar_valor('Qual o valor do gasto?: ')
+            nome = validar_nome('Qual o nome do gasto?: ')        
             hoje = date.today()
             data_formatada = hoje.strftime('%d/%m/%Y')
             gastos.append({
                            'nome': nome, 'gasto': gasto, 'data': data_formatada
                                })
-       
             resposta_usuario = resposta()
 
 def ver_saldo():
@@ -73,15 +80,18 @@ def ver_gasto():
     msg_gasto = 'Gastos'
     total_gasto = 0
     print('-' * 5, (msg_gasto), '-' * 5)
+    print()
     for gasto in gastos:
         print(f'{gasto['nome']}: R$ {gasto['gasto']:.2f} - {gasto['data']}.')
         total_gasto = total_gasto + gasto['gasto']
 
-    print(f'\nTotal Gasto: R$ {total_gasto:.2f}.\n')
+    print(f'\nTotal Gasto: R$ {total_gasto:.2f}.')
 
 menu = ''
 while menu != '4':
-    menu = input('1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
+    print()
+    print('-' * 5, 'MENU', '-' * 5)
+    menu = input('\n1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
     if menu == '1':
         add_gasto()
  
