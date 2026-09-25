@@ -1,13 +1,6 @@
 from datetime import date
 
 
-name = 'Mão de Vaca'
-print('-' * (len(name) + 15))
-print(name.center(25))
-print('-' * (len(name) + 15))
-print('Seu controlador de gastos.')
-print()
-
 def validar_valor(mensagem):
         valor_valido = False
         while not valor_valido:
@@ -32,14 +25,10 @@ def validar_nome(mensagem):
         else:
             print('Coloque um nome válido.')
 
-saldo = validar_valor('Quantos você quer gastar no mês?: ')
-
-gastos = []
-
 def resposta():
      resposta_valida = False
      while not resposta_valida:
-          newgasto = input('Gostaria de adicionar um novo gasto?: (s/n).\n').lower().strip()
+          newgasto = input('Adicionar um novo gasto?: (s/n).\n').lower().strip()
           if newgasto in ['s', 'n']:
                resposta_valida = True
                return newgasto
@@ -47,7 +36,7 @@ def resposta():
             print('Digite (s) ou (n).')
      
 
-def add_gasto():
+def add_gasto(gastos):
 
     resposta_usuario = resposta()
     while resposta_usuario == 's':   
@@ -60,7 +49,18 @@ def add_gasto():
                                })
             resposta_usuario = resposta()
 
-def ver_saldo():
+def ver_gasto(gastos):
+    msg_gasto = 'Gastos'
+    total_gasto = 0
+    print('-' * 5, (msg_gasto), '-' * 5)
+    print()
+    for gasto in gastos:
+        print(f'{gasto['nome']}: R$ {gasto['gasto']:.2f} - {gasto['data']}.')
+        total_gasto = total_gasto + gasto['gasto']
+
+    print(f'\nTotal Gasto: R$ {total_gasto:.2f}.')
+
+def ver_saldo(saldo, gastos):
     total_gasto = 0
     for gasto in gastos:
         total_gasto = total_gasto + gasto['gasto']
@@ -74,41 +74,41 @@ def ver_saldo():
         print(f'Atenção! \nVocê ultrapassou seu orçamento mensal em R$ {- sobra:.2f}.\n')
     else:
         print(f'Saldo disponível: R$ {sobra:.2f}\n')
-    
 
-def ver_gasto():
-    msg_gasto = 'Gastos'
-    total_gasto = 0
-    print('-' * 5, (msg_gasto), '-' * 5)
+
+def cabecalho():
+    name = 'Mão de Vaca'
+    print('-' * (len(name) + 15))
+    print(name.center(25))
+    print('-' * (len(name) + 15))
+    print('Seu controlador de gastos.')
     print()
-    for gasto in gastos:
-        print(f'{gasto['nome']}: R$ {gasto['gasto']:.2f} - {gasto['data']}.')
-        total_gasto = total_gasto + gasto['gasto']
 
-    print(f'\nTotal Gasto: R$ {total_gasto:.2f}.')
-
-menu = ''
-while menu != '4':
-    print()
-    print('-' * 5, 'MENU', '-' * 5)
-    menu = input('\n1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
-    if menu == '1':
-        add_gasto()
+def main():
+    saldo = validar_valor('Quantos você quer gastar no mês?: ')
+    gastos = []
+    menu = ''
+    while menu != '4':
+        print()
+        print('-' * 5, 'MENU', '-' * 5)
+        menu = input('\n1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
+        if menu == '1':
+            add_gasto(gastos)
  
-    elif menu == '2':
-        ver_gasto()
+        elif menu == '2':
+            ver_gasto(gastos)
 
-    elif menu == '3':
-        ver_saldo()
+        elif menu == '3':
+            ver_saldo(saldo, gastos)
 
-    elif menu == '4':
-        print('Até mais. :)')
+        elif menu == '4':
+            print('Até mais. :)')
 
-    else:
-        print('Opção inválida.')
+        else:
+            print('Opção inválida.')
 
-
-
+cabecalho()
+main()
 
 #fazer o controle desses valores no banco de dados
 
