@@ -14,7 +14,6 @@ def validar_valor(mensagem):
             except ValueError:
                 print('Erro. Por favor, tente novamente.')
 
-
 def validar_nome(mensagem):
     nome_gasto = False
     while not nome_gasto:
@@ -37,7 +36,6 @@ def resposta():
      
 
 def add_gasto(gastos):
-
     resposta_usuario = resposta()
     while resposta_usuario == 's':   
             gasto = validar_valor('Qual o valor do gasto?: ')
@@ -57,18 +55,15 @@ def ver_gasto(gastos):
     for gasto in gastos:
         print(f'{gasto['nome']}: R$ {gasto['gasto']:.2f} - {gasto['data']}.')
         total_gasto = total_gasto + gasto['gasto']
-
     print(f'\nTotal Gasto: R$ {total_gasto:.2f}.')
 
 def ver_saldo(saldo, gastos):
     total_gasto = 0
     for gasto in gastos:
         total_gasto = total_gasto + gasto['gasto']
-
     sobra = saldo - total_gasto
     print(f'Orçamento mensal: R$ {saldo:.2f}.')
     print(f'Total gasto: R$ {total_gasto:.2f}.')
-
     if sobra <= 0:
         print(f'Saldo disponível: R$ {sobra:.2f}')
         print(f'Atenção! \nVocê ultrapassou seu orçamento mensal em R$ {- sobra:.2f}.\n')
@@ -84,28 +79,33 @@ def cabecalho():
     print('Seu controlador de gastos.')
     print()
 
+
+def mostrar_menu():
+    print()
+    print('-' * 5, 'MENU', '-' * 5)
+    menu_valido = False
+    while not menu_valido:
+        menu = input('\n1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
+        if menu in ['1', '2', '3', '4']:
+            return menu
+        else:
+            print('Opção inválida.')
+
 def main():
     saldo = validar_valor('Quantos você quer gastar no mês?: ')
     gastos = []
     menu = ''
     while menu != '4':
-        print()
-        print('-' * 5, 'MENU', '-' * 5)
-        menu = input('\n1 - Adicionar gasto.\n2 - Ver gastos.\n3 - Ver saldo.\n4 - Sair.\n')
+        menu = mostrar_menu()
         if menu == '1':
             add_gasto(gastos)
- 
         elif menu == '2':
             ver_gasto(gastos)
-
         elif menu == '3':
             ver_saldo(saldo, gastos)
-
         elif menu == '4':
             print('Até mais. :)')
 
-        else:
-            print('Opção inválida.')
 
 cabecalho()
 main()
